@@ -106,7 +106,7 @@ export default function CreateUser() {
 
   const createUser = useMutation(async (user: CreateUserFormData) => {
     const response = await api.post("/users", data);
-    router.push("/users");
+    router.push("/users")
     return response.data.user;
   });
 
@@ -118,9 +118,8 @@ export default function CreateUser() {
 
   const handleCreateUser: SubmitHandler<CreateUserFormData> = async (
     values
-  ) => {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
+    ) => {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
     await createUser.mutateAsync(values);
   };
 
@@ -238,7 +237,7 @@ export default function CreateUser() {
               </Link>
               <Button
                 type="submit"
-                colorScheme="pink"
+                colorScheme="red"
                 isLoading={formState.isSubmitting}
               >
                 Salvar

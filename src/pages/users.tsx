@@ -86,11 +86,11 @@ export default function UserList({users}: any){
           { !isLoading && isFetching && <Spinner size="sm" color="gray.500" ml="4"/> }
           </Heading>
           { !checked ? 
-            <Button size="sm" fontSize="sm" rightIcon={<RiGroupLine />} colorScheme="pink" disabled={!checked}>
-            {!isLoading ? data?.users.length + " usuários" : "Carregando..."}
+            <Button size="sm" fontSize="sm" rightIcon={<RiGroupLine />} colorScheme="red" disabled={!checked}>
+            {!isLoading ? !data?.users.length ? "Erro" :  data?.users.length + " usuários" : "Carregando..."}
           </Button>
                    : 
-           <Button size="sm" fontSize="sm" rightIcon={<RiDeleteBinLine />} colorScheme="pink">
+           <Button size="sm" fontSize="sm" rightIcon={<RiDeleteBinLine />} colorScheme="red">
            Deletar
          </Button>
           }
@@ -109,7 +109,7 @@ export default function UserList({users}: any){
         <Thead>
           <Tr>
           <Th px={["4","4","6"]} color="gray.300" width="8">
-              <Checkbox colorScheme="pink" onChange={() => !checked ? setChecked(true) : setChecked(false)}/>
+              <Checkbox colorScheme="red" onChange={() => !checked ? setChecked(true) : setChecked(false)}/>
             </Th>
             <Th>Usuário</Th>
             <Th>CPF</Th>
@@ -118,7 +118,7 @@ export default function UserList({users}: any){
             <Th>Telefone</Th>
             <Th>Nome da mãe</Th>
             <Th>Status</Th>
-            <Th>Mais</Th>
+            <Th>Opções</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -127,11 +127,11 @@ export default function UserList({users}: any){
               <>
               <Tr key={user._id}>
             <Td px={["4","4","6"]}>
-            <Checkbox colorScheme="pink" isChecked={checked} hidden={!checked}/>
+            <Checkbox colorScheme="red" isChecked={checked} hidden={!checked}/>
             </Td>
             <Td>
               <Box>
-                <Text color="pink.400" colorScheme="pink" fontWeight="bold">{user.name}</Text>
+                <Text color="red.400" colorScheme="red" fontWeight="bold">{user.name}</Text>
                 <Text fontSize="sm" color="gray.300">{user.email}</Text>
               </Box>
             </Td>
@@ -145,7 +145,7 @@ export default function UserList({users}: any){
             <Menu>
           {({ isOpen }) => (
             <>
-              <MenuButton isActive={isOpen} size="sm" as={Button} fontSize="sm" colorScheme="pink">
+              <MenuButton isActive={isOpen} size="sm" as={Button} fontSize="sm" colorScheme="red">
               <Icon as={RiMore2Fill}/>
                 {/* {isOpen ? 'Fechar' : 'Abrir'} */}
               </MenuButton>

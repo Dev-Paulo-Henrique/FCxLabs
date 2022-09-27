@@ -80,10 +80,21 @@ export default function SignIn() {
         </Stack>
         <Flex justifyContent="space-between" alignItems="center">
           <Button
-            w="100%"
+            as="a"
+            href="/signUp"
+            w="48%"
             type="submit"
             mt="6"
-            colorScheme="pink"
+            colorScheme="blackAlpha"
+            size="lg"
+          >
+            Criar
+          </Button>
+          <Button
+            w="48%"
+            type="submit"
+            mt="6"
+            colorScheme="red"
             size="lg"
             isLoading={formState.isSubmitting}
           >

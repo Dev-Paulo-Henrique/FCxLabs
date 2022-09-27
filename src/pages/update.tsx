@@ -146,7 +146,7 @@ export default function CreateUser() {
       }}
     >
       <Head>
-        <title>Sign Up</title>
+        <title>Update</title>
       </Head>
       <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
         <Box
@@ -242,10 +242,10 @@ export default function CreateUser() {
               </Link>
               <Button
                 type="submit"
-                colorScheme="pink"
+                colorScheme="red"
                 isLoading={formState.isSubmitting}
               >
-                Salvar
+                Atualizar
               </Button>
             </HStack>
           </Flex>

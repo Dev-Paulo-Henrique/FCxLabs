@@ -13,6 +13,10 @@ module.exports = {
 
     let user = await User.findOne({ email });
 
+    if(user) {
+      response.status(400).send({ error: 'User already exists' })
+    }
+
     if (!user) {
       user = await User.create({
         name,
