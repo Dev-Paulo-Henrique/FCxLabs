@@ -11,13 +11,13 @@ $ git clone https://github.com/Dev-Paulo-Henrique/FCxLabs.git
 
 2. Logo após, execute:
 ```bash
-$  cd FCxLabs
+$ cd FCxLabs
 ```
 3. Para instalar as dependências:
 ```bash
-$  npm install
-#  ou
-$  yarn
+$ npm install
+# ou
+$ yarn
 ```
 
 ## Front-end
