@@ -1,5 +1,5 @@
-const User = require('../models/User');
-const { findConnections, sendMessage } = require('../websocket');
+const User = require("../models/User");
+const { findConnections, sendMessage } = require("../websocket");
 
 module.exports = {
   async index(request, response) {
@@ -7,48 +7,86 @@ module.exports = {
 
     return response.json(users);
   },
-  
-  async edit(request, response) {
-    const { name, email, password, tel, cpf, nameMother, date, insert, update, status, login  } = request.body;
+
+  async delete(request, response) {
+    const { email } = request.body;
 
     let user = await User.findOne({ email });
 
     if (user) {
-      user = await User.findOneAndUpdate({email}, {
-        name,
-        email,
-        password,
-        cpf,
-        tel,
-        date,
-        nameMother,
-        insert,
-        update: true,
-        status,
-        login
-      })      
+      user = await User.findOneAndDelete({ email });
+      return response.status(200).send({ success: "Usuário deletado" });
     }
 
-    if(!user) {
-      response.status(400).send({ error: 'User not exists' })
+    if (!user) {
+      return response.status(400).send({ error: "Usuário não existe" });
     }
-      
-      // await User.findOneAndUpdate({email}, {
-      //   '$set': {
-      //     update: true
-      //   }
-      // })
 
     return response.json(users);
   },
-  
-  async store(request, response) {
-    const { name, email, password, tel, cpf, nameMother, date, insert, update, status, login  } = request.body;
+
+  async edit(request, response) {
+    const {
+      name,
+      email,
+      password,
+      tel,
+      cpf,
+      nameMother,
+      date,
+      update,
+      status,
+      login,
+    } = request.body;
 
     let user = await User.findOne({ email });
 
-    if(user) {
-      response.status(400).send({ error: 'User already exists' })
+    if (user) {
+      user = await User.findOneAndUpdate(
+        { email },
+        {
+          name,
+          email,
+          password,
+          cpf,
+          tel,
+          date,
+          nameMother,
+          insert: user.insert,
+          update,
+          status,
+          login,
+        }
+      );
+      return response.status(200).send({ success: "Usuário atualizado" });
+    }
+
+    if (!user) {
+      return response.status(400).send({ error: "Usuário não existe" });
+    }
+
+    return response.json(users);
+  },
+
+  async store(request, response) {
+    const {
+      name,
+      email,
+      password,
+      tel,
+      cpf,
+      nameMother,
+      date,
+      insert,
+      update,
+      status,
+      login,
+    } = request.body;
+
+    let user = await User.findOne({ email });
+
+    if (user) {
+      response.status(400).send({ error: "Usuário já existe" });
     }
 
     if (!user) {
@@ -63,30 +101,34 @@ module.exports = {
         insert,
         update,
         status,
-        login
-      })
+        login,
+      });
 
-      const sendSocketMessageTo = findConnections(email)
+      const sendSocketMessageTo = findConnections(email);
 
-      sendMessage(sendSocketMessageTo, 'new-user', user);
+      sendMessage(sendSocketMessageTo, "new-user", user);
     }
-  
+
     return response.json(user);
   },
 
-  async validate(request, response){
-    const { email, password } = request.body
+  async validate(request, response) {
+    const { email, password } = request.body;
 
-    const user = await User.findOne({ email })
+    const user = await User.findOne({ email });
 
-    if(!user){
-      return response.status(400).send({ error: 'User not found' })
+    if (!user) {
+      return response.status(400).send({ error: "Usuário não encontrado" });
     }
 
-    if(password !== user.password){
-      return response.status(400).send({ error: 'Invalid password' })
+    if (password !== user.password) {
+      return response.status(400).send({ error: "Senha incorreta" });
     }
 
-    response.send({ user })
-  }
+    if (user.status !== "ativo") {
+      return response.status(400).send({ error: "Usuário não está ativo" });
+    }
+
+    response.send({ user });
+  },
 };

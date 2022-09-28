@@ -15,7 +15,7 @@ mongoose.connect(
   "mongodb+srv://omnistack:18032004@cluster0.akrde.mongodb.net/?retryWrites=true&w=majority",
   {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
   }
 );
 
@@ -26,7 +26,5 @@ app.use(routes);
 server.listen(3333);
 
 app.get("/", (req, res) =>
-  res.send(
-    '<h1><center>Backend - Case</center></h1>'
-  )
+  res.send("<h1><center>Backend - Case</center></h1>")
 );

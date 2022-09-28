@@ -1,4 +1,4 @@
-import { Flex, Button, Stack } from "@chakra-ui/react";
+import { Flex, Button, Stack, Image } from "@chakra-ui/react";
 import { Input } from "../components/Form/Input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
@@ -44,7 +44,7 @@ export default function SignIn() {
       .then(() => {
         router.push("/users"), toast.success("Bem-vindo");
       })
-      .catch(() => toast.error("E-mail ou senha incorreto"));
+      .catch((error) => toast.error(error.response.data.error));
   };
 
   return (
@@ -62,6 +62,13 @@ export default function SignIn() {
         flexDir="column"
         onSubmit={handleSubmit(handleSignIn)}
       >
+        <Flex justifyContent="center">
+          <Image
+            src="https://i.ibb.co/85mfFwL/1634353681075-removebg-preview.png"
+            w={150}
+            my={-10}
+          />
+        </Flex>
         <Stack spacing="4">
           <Input
             type="email"

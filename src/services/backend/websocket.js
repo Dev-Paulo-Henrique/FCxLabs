@@ -1,5 +1,4 @@
-const socketio = require('socket.io');
-// const parseStringAsArray = require('./utils/parseStringAsArray');
+const socketio = require("socket.io");
 
 let io;
 const connections = [];
@@ -7,12 +6,9 @@ const connections = [];
 exports.setupWebsocket = (server) => {
   io = socketio(server);
 
-  io.on('connection', socket => {
-    // const { info } = socket.handshake.query;
-
+  io.on("connection", (socket) => {
     connections.push({
       id: socket.id,
-      // info: parseStringAsArray(info),
     });
   });
 };

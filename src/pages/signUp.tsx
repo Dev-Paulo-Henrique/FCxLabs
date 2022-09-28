@@ -20,6 +20,7 @@ import { api } from "../services/api";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { theme } from "../styles/theme";
+import toast from "react-hot-toast";
 
 type CreateUserFormData = {
   name: string;
@@ -105,9 +106,12 @@ export default function CreateUser() {
   };
 
   const createUser = useMutation(async (user: CreateUserFormData) => {
-    const response = await api.post("/users", data);
-    router.push("/users")
-    return response.data.user;
+    // const response =
+    await api
+      .post("/users", data)
+      .then(() => router.push("/users"))
+      .catch((error) => toast.error(error.response.data.error));
+    // return response.data?.user;
   });
 
   const { register, handleSubmit, formState } = useForm({
@@ -118,9 +122,9 @@ export default function CreateUser() {
 
   const handleCreateUser: SubmitHandler<CreateUserFormData> = async (
     values
-    ) => {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-    await createUser.mutateAsync(values);
+  ) => {
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await createUser.mutateAsync(values).finally(() => router.push("/users"));
   };
 
   return (
