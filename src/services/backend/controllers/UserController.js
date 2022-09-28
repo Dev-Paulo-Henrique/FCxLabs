@@ -8,6 +8,40 @@ module.exports = {
     return response.json(users);
   },
   
+  async edit(request, response) {
+    const { name, email, password, tel, cpf, nameMother, date, insert, update, status, login  } = request.body;
+
+    let user = await User.findOne({ email });
+
+    if (user) {
+      user = await User.findOneAndUpdate({email}, {
+        name,
+        email,
+        password,
+        cpf,
+        tel,
+        date,
+        nameMother,
+        insert,
+        update: true,
+        status,
+        login
+      })      
+    }
+
+    if(!user) {
+      response.status(400).send({ error: 'User not exists' })
+    }
+      
+      // await User.findOneAndUpdate({email}, {
+      //   '$set': {
+      //     update: true
+      //   }
+      // })
+
+    return response.json(users);
+  },
+  
   async store(request, response) {
     const { name, email, password, tel, cpf, nameMother, date, insert, update, status, login  } = request.body;
 

@@ -1,17 +1,16 @@
-import { Box, Flex, Heading, Button, Icon, MenuButton, Menu, MenuList, MenuItem, Table, Thead, Tr, Th, Checkbox, Tbody, Td, Text, useBreakpointValue, Spinner, Input } from "@chakra-ui/react";
+import { Box, Flex, Heading, Button, Icon, MenuButton, Menu, MenuList, MenuItem, Table, Thead, Tr, Th, Checkbox, Tbody, Td, Text, useBreakpointValue, Spinner, Input, Select, Avatar, AvatarBadge, Divider } from "@chakra-ui/react";
 import { RiSearchLine, RiMore2Fill, RiDeleteBinLine, RiGroupLine } from "react-icons/ri";
-import { Header } from "../components/Header";
-import { SearchBox } from "../components/Header/SearchBox";
-import { Filter } from "../components/Filter";
+import { Logo } from "../components/Header/Logo";
 import Pagination from "../components/Pagination";
 import { useUsers } from "../services/hooks/useUsers";
 import { ageFromDateOfBirthday } from "../services/utils/calculateAge";
 import { DATE } from '../services/utils/formats'
-import { useState, useEffect, JSXElementConstructor, Key, ReactElement, ReactFragment, ReactPortal } from "react";
+import { useState, JSXElementConstructor, Key, ReactElement, ReactFragment, ReactPortal } from "react";
 import Head from 'next/head'
 import { theme } from "../styles/theme";
 
 type SearchProps = {
+  date: string | any[];
   name: string | any[];
   email: string | any[];
   cpf: string | any[];
@@ -34,6 +33,8 @@ export default function UserList({users}: any){
   const [ checked, setChecked] = useState(false);
   const [ page, setPage ] = useState(1)
   const [ search, setSearch ] = useState('')
+  const [ chooseStatus, setChooseStatus ] = useState('ativo')
+  const [ age, setAge ] = useState("1")
   
   const { data, isLoading, isFetching, error } = useUsers(page, {
     initialData: users,
@@ -46,7 +47,20 @@ export default function UserList({users}: any){
       return setSearch(result)
   }
 
-  console.log(search)
+  (array: any, s: any) => {
+      const result = array?.filter(
+        (e: SearchProps) => e.status.includes(s)
+        )
+      return setChooseStatus(result)
+  }
+
+  (array: any, s: any) =>  {
+      const result = array?.filter(
+        (e: SearchProps) => ageFromDateOfBirthday(e.date.includes(s))
+        )
+        
+      return setAge(result)
+  }
   
   const isWideVersion = useBreakpointValue({
     base: false,
@@ -71,13 +85,27 @@ export default function UserList({users}: any){
     <Head>
     <title>Usuários</title>
     </Head>
-      <Header/>
+    <Flex as="header" w="100%" h="20" maxWidth={1480} mx="auto" mt="4" align="center" px="6">
+      <Logo/>
+      <Flex align="center" ml="auto" >
       <Flex as="label" flex="1" py="4" px="8" ml="6" maxWidth={400} alignSelf="center" color="gray.200" position="relative" bg="gray.800" borderRadius="full">
       <Input color="gray.50" variant="unstyled" px="4" mr="4" placeholder="Buscar na plataforma" _placeholder={{
         color: 'gray.400'
       }} onChange={e => handleFilter(data?.users, e?.target.value)}/>
       <Icon as={RiSearchLine} fontSize="20" cursor={"pointer"}/>
       </Flex>
+      </Flex>
+      <Button
+            as="a"
+            href="/signUp"
+            w={200}
+            ml={50}
+            colorScheme="blackAlpha"
+            size="lg"
+          >
+            Criar usuário
+          </Button>
+    </Flex>
       <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
       <Box flex="1"  borderRadius={8} bg="gray.800" p="8">
       <Flex mb="8" justify="space-between" align="center">
@@ -85,15 +113,29 @@ export default function UserList({users}: any){
           Usuários
           { !isLoading && isFetching && <Spinner size="sm" color="gray.500" ml="4"/> }
           </Heading>
+          <Box display="flex" alignItems="center" justifyContent="space-between" w={400}>
+          <Select placeholder='Idade' focusBorderColor="red.500"  bgColor="#181B23" border="none" w={"xg"} onChange={(event) => setAge(event.target.value)}>
+        <option value="18" style={{ background: '#181B23' }}>19 - 25</option>
+        <option value="25" style={{ background: '#181B23' }}>26 - 30</option>
+        <option value="30" style={{ background: '#181B23' }}>31 - 35</option>
+        <option value="35" style={{ background: '#181B23' }}>36 - 40</option>
+        <option value="40" style={{ background: '#181B23' }}>+ 40</option>
+        </Select>
+          <Select placeholder='Status' focusBorderColor="red.500" bgColor="#181B23" border="none" w={"xg"} onChange={(event) => setChooseStatus(event.target.value)}>
+        <option value="ativo" style={{ background: '#181B23' }}>Ativo</option>
+        <option value="inativo" style={{ background: '#181B23' }}>Inativo</option>
+        <option value="bloqueado" style={{ background: '#181B23' }}>Bloqueado</option>
+        </Select>
           { !checked ? 
             <Button size="sm" fontSize="sm" rightIcon={<RiGroupLine />} colorScheme="red" disabled={!checked}>
             {!isLoading ? !data?.users.length ? "Erro" :  data?.users.length + " usuários" : "Carregando..."}
           </Button>
                    : 
-           <Button size="sm" fontSize="sm" rightIcon={<RiDeleteBinLine />} colorScheme="red">
+                   <Button size="sm" fontSize="sm" rightIcon={<RiDeleteBinLine />} colorScheme="red">
            Deletar
          </Button>
           }
+          </Box>
       </Flex>
       { isLoading ? (
         <Flex justify="center" >
@@ -117,7 +159,6 @@ export default function UserList({users}: any){
             <Th>Idade</Th>
             <Th>Telefone</Th>
             <Th>Nome da mãe</Th>
-            <Th>Status</Th>
             <Th>Opções</Th>
           </Tr>
         </Thead>
@@ -125,9 +166,24 @@ export default function UserList({users}: any){
           {data?.users.map((user: ShowUsers) => {
             return (
               <>
+              { user.status == chooseStatus &&
+              ageFromDateOfBirthday(user.date) > parseInt(age) && ageFromDateOfBirthday(user.date) < parseInt(age) + 5 ? 
               <Tr key={user._id}>
             <Td px={["4","4","6"]}>
-            <Checkbox colorScheme="red" isChecked={checked} hidden={!checked}/>
+            {!checked && user.status == "ativo" ? 
+            <Avatar name={user.name?.toString()} size="sm">
+            <AvatarBadge bg="green.500" boxSize='1.25em'/>
+            </Avatar>
+             : !checked && user.status == "inativo" ? 
+             <Avatar name={user.name?.toString()} size="sm">
+             <AvatarBadge bg="yellow" boxSize='1.25em'/>
+             </Avatar>
+              : !checked && user.status == "bloqueado" ? 
+              <Avatar name={user.name?.toString()} size="sm">
+              <AvatarBadge bg="tomato" boxSize='1.25em'/>
+              </Avatar>
+              :
+             <Checkbox colorScheme="red" isChecked={checked}/>}
             </Td>
             <Td>
               <Box>
@@ -140,7 +196,6 @@ export default function UserList({users}: any){
             <Td>{ageFromDateOfBirthday(user.date) + " anos"}</Td>
             <Td>{user.tel}</Td>
             <Td>{user.nameMother}</Td>
-            <Td>{user.status}</Td>
             <Td>
             <Menu>
           {({ isOpen }) => (
@@ -152,12 +207,17 @@ export default function UserList({users}: any){
               <MenuList>
                 <MenuItem color="black">Editar</MenuItem>
                 <MenuItem color="black" onClick={() => alert('Excluindo...')}>Excluir</MenuItem>
+                <Divider/>
+                <MenuItem color="black">Ativar</MenuItem>
+                <MenuItem color="black">Desativar</MenuItem>
+                <MenuItem color="black">Bloquear</MenuItem>
               </MenuList>
             </>
           )}
         </Menu>
             </Td>
           </Tr>
+           : <></> }
           </>
             )
           })}

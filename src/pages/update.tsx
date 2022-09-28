@@ -21,7 +21,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { theme } from "../styles/theme";
 
-type CreateUserFormData = {
+type UpdateUserFormData = {
   name: string;
   email: string;
   password: string;
@@ -41,7 +41,7 @@ type EventProps = {
   };
 };
 
-const createUserFormSchema = yup.object().shape({
+const updateUserFormSchema = yup.object().shape({
   name: yup.string().required("Nome obrigatório"),
   nameMother: yup.string().required("Nome obrigatório"),
   email: yup.string().required("E-mail obrigatório").email("E-mail inválido"),
@@ -65,7 +65,7 @@ const createUserFormSchema = yup.object().shape({
     .oneOf([null, yup.ref("password")], "As senhas precisam ser iguais"),
 });
 
-export default function CreateUser() {
+export default function UpdateUser() {
   const router = useRouter();
   const [name, setName] = useState("");
   const [nameMother, setNameMother] = useState("");
@@ -103,29 +103,29 @@ export default function CreateUser() {
     tel: tel,
     date: date,
     nameMother: nameMother,
-    insert: today,
-    update: null,
+    // insert: today,
+    update: today,
     status: "ativo",
   };
 
-  const createUser = useMutation(async (user: CreateUserFormData) => {
-    const response = await api.post("/users", data);
+  const updateUser = useMutation(async (user: UpdateUserFormData) => {
+    const response = await api.post("/edit", data);
     router.push("/users");
     return response.data.user;
   });
 
   const { register, handleSubmit, formState } = useForm({
-    resolver: yupResolver(createUserFormSchema),
+    resolver: yupResolver(updateUserFormSchema),
   });
 
   const { errors } = formState;
 
-  const handleCreateUser: SubmitHandler<CreateUserFormData> = async (
+  const handleUpdateUser: SubmitHandler<UpdateUserFormData> = async (
     values
   ) => {
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    await createUser.mutateAsync(values);
+    await updateUser.mutateAsync(values);
   };
 
   return (
@@ -155,10 +155,10 @@ export default function CreateUser() {
           borderRadius={8}
           bg="gray.800"
           p={["6", "8"]}
-          onSubmit={handleSubmit(handleCreateUser)}
+          onSubmit={handleSubmit(handleUpdateUser)}
         >
           <Heading size="lg" fontWeight="normal">
-            Criar usuário
+            Atualizar usuário
           </Heading>
           <Divider my="6" borderColor="gray.700" />
           <VStack spacing="8">

@@ -1,5 +1,6 @@
 import axios from 'axios';
 
 export const api = axios.create({
-  baseURL: 'https://pe0mne.sse.codesandbox.io/'
+  baseURL: 'http://localhost:3333/'
+  // baseURL: 'https://pe0mne.sse.codesandbox.io/'
 })

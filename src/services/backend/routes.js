@@ -8,6 +8,7 @@ const routes = Router();
 routes.get('/users', UserController.index);
 routes.post('/users', UserController.store);
 routes.post('/auth', UserController.validate);
+routes.post('/edit', UserController.edit);
 
 routes.get('/search', SearchController.index);
 
