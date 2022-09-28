@@ -62,13 +62,6 @@ export default function SignIn() {
         flexDir="column"
         onSubmit={handleSubmit(handleSignIn)}
       >
-        <Flex justifyContent="center">
-          <Image
-            src="https://i.ibb.co/85mfFwL/1634353681075-removebg-preview.png"
-            w={150}
-            my={-10}
-          />
-        </Flex>
         <Stack spacing="4">
           <Input
             type="email"
