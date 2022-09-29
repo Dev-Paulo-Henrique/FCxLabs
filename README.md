@@ -1,34 +1,50 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# FCx Labs - Avaliação
 
-## Getting Started
+Website construído para gerenciamento de usuários e manipulação de dados.
 
-First, run the development server:
+## Clone do projeto
 
+1. Abra Git Bash e digite o comando:
 ```bash
-npm run dev
-# or
-yarn dev
+$ git clone https://github.com/Dev-Paulo-Henrique/FCxLabs.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Logo após, execute:
+```bash
+$ cd FCxLabs
+```
+3. Para instalar as dependências:
+```bash
+$ npm install
+# ou
+$ yarn
+```
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Front-end
+1. Execute `yarn dev`
+2. Abra o navegador e acesse ` http://localhost:3000`
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## Back-end
+1. Execute `yarn backend`
+2. Abra o navegador e acesse ` http://localhost:3333`
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Tecnologias utilizadas
 
-## Learn More
+- Axios
+- Chakra UI
+- Cors
+- Express Js
+- MongoDB
+- Mongoose
+- Next Js
+- React Hook Form
+- React Hot Toast
+- React Icons
+- React Query
+- Socket.io
+- Typescript
+- YUP
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+___
+⠀
+Clique neste **[link](https://fcxlabs.vercel.app/)** para acessar o projeto online.

@@ -109,7 +109,7 @@ export default function UpdateUser({ users }: any) {
                 {user._id == UserId && (
                   <>
                     <Heading size="lg" fontWeight="normal">
-                      Digite seu e-mail para a confirmação
+                      Digite o e-mail do usuário para a confirmação!
                     </Heading>
                     <Divider my="6" borderColor="gray.700" />
                     <VStack spacing="8" key={user._id}>

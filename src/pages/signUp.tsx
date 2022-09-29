@@ -106,12 +106,10 @@ export default function CreateUser() {
   };
 
   const createUser = useMutation(async (user: CreateUserFormData) => {
-    // const response =
     await api
       .post("/users", data)
       .then(() => router.push("/users"))
       .catch((error) => toast.error(error.response.data.error));
-    // return response.data?.user;
   });
 
   const { register, handleSubmit, formState } = useForm({

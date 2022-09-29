@@ -122,7 +122,6 @@ export default function UserList({ users }: any) {
   const [search, setSearch] = useState("");
   const [chooseStatus, setChooseStatus] = useState("ativo");
   const [age, setAge] = useState("1");
-  const [newPage, setNewPage] = useState(0);
 
   const { data, isLoading, isFetching, error } = useUsers(page, {
     initialData: users,
@@ -199,34 +198,36 @@ export default function UserList({ users }: any) {
         px="6"
       >
         <Logo />
-        <Flex align="center" ml="auto">
-          <Flex
-            as="label"
-            flex="1"
-            py="4"
-            px="8"
-            ml="6"
-            maxWidth={400}
-            alignSelf="center"
-            color="gray.200"
-            position="relative"
-            bg="gray.800"
-            borderRadius="full"
-          >
-            <Input
-              color="gray.50"
-              variant="unstyled"
-              px="4"
-              mr="4"
-              placeholder="Buscar na plataforma"
-              _placeholder={{
-                color: "gray.400",
-              }}
-              onChange={(e) => handleFilter(data?.users, e?.target.value)}
-            />
-            <Icon as={RiSearchLine} fontSize="20" cursor={"pointer"} />
+        {isWideVersion && (
+          <Flex align="center" ml="auto">
+            <Flex
+              as="label"
+              flex="1"
+              py="4"
+              px="8"
+              ml="6"
+              maxWidth={400}
+              alignSelf="center"
+              color="gray.200"
+              position="relative"
+              bg="gray.800"
+              borderRadius="full"
+            >
+              <Input
+                color="gray.50"
+                variant="unstyled"
+                px="4"
+                mr="4"
+                placeholder="Buscar na plataforma"
+                _placeholder={{
+                  color: "gray.400",
+                }}
+                onChange={(e) => handleFilter(data?.users, e?.target.value)}
+              />
+              <Icon as={RiSearchLine} fontSize="20" cursor={"pointer"} />
+            </Flex>
           </Flex>
-        </Flex>
+        )}
         <Button
           as="a"
           href="/signUp"
@@ -251,9 +252,10 @@ export default function UserList({ users }: any) {
               display="flex"
               alignItems="center"
               justifyContent="space-between"
-              w={400}
+              // w={400}
+              w={250}
             >
-              <Select
+              {/* <Select
                 placeholder="Idade"
                 focusBorderColor="red.500"
                 bgColor="#181B23"
@@ -276,7 +278,7 @@ export default function UserList({ users }: any) {
                 <option value="40" style={{ background: "#181B23" }}>
                   + 40
                 </option>
-              </Select>
+              </Select> */}
               <Select
                 placeholder="Status"
                 focusBorderColor="red.500"
@@ -343,23 +345,23 @@ export default function UserList({ users }: any) {
                       />
                     </Th>
                     <Th>Usuário</Th>
-                    <Th>CPF</Th>
-                    <Th>Nascimento</Th>
-                    <Th>Idade</Th>
-                    <Th>Telefone</Th>
-                    <Th>Nome da mãe</Th>
+                    {isWideVersion && <Th>CPF</Th>}
+                    {isWideVersion && <Th>Nascimento</Th>}
+                    {isWideVersion && <Th>Idade</Th>}
+                    {isWideVersion && <Th>Telefone</Th>}
+                    {isWideVersion && <Th>Nome da mãe</Th>}
                     <Th>Opções</Th>
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {data?.users
-                    .map((user: ShowUsers) => {
+                  {
+                    data?.users.map((user: ShowUsers) => {
                       return (
                         <>
-                          {user.status == chooseStatus &&
-                          ageFromDateOfBirthday(user.date) > parseInt(age) &&
-                          ageFromDateOfBirthday(user.date) <
-                            parseInt(age) + 5 ? (
+                          {user.status == chooseStatus ? (
+                            // ageFromDateOfBirthday(user.date) > parseInt(age) &&
+                            // ageFromDateOfBirthday(user.date) <
+                            //   parseInt(age) + 5 ? (
                             <Tr key={user._id}>
                               <Td px={["4", "4", "6"]}>
                                 {!checked && user.status == "ativo" ? (
@@ -407,13 +409,15 @@ export default function UserList({ users }: any) {
                                   </Text>
                                 </Box>
                               </Td>
-                              <Td>{user.cpf}</Td>
-                              <Td>{DATE(user.date)}</Td>
-                              <Td>
-                                {ageFromDateOfBirthday(user.date) + " anos"}
-                              </Td>
-                              <Td>{user.tel}</Td>
-                              <Td>{user.nameMother}</Td>
+                              {isWideVersion && <Td>{user.cpf}</Td>}
+                              {isWideVersion && <Td>{DATE(user.date)}</Td>}
+                              {isWideVersion && (
+                                <Td>
+                                  {ageFromDateOfBirthday(user.date) + " anos"}
+                                </Td>
+                              )}
+                              {isWideVersion && <Td>{user.tel}</Td>}
+                              {isWideVersion && <Td>{user.nameMother}</Td>}
                               <Td>
                                 <Menu>
                                   {({ isOpen }) => (
@@ -446,15 +450,29 @@ export default function UserList({ users }: any) {
                                           Excluir
                                         </MenuItem>
                                         <Divider />
-                                        <MenuItem color="black">
-                                          Ativar
-                                        </MenuItem>
-                                        <MenuItem color="black">
-                                          Desativar
-                                        </MenuItem>
-                                        <MenuItem color="black">
-                                          Bloquear
-                                        </MenuItem>
+                                        {user.status === "ativo" ? (
+                                          <>
+                                            <MenuItem color="black" isDisabled>
+                                              Desativar
+                                            </MenuItem>
+                                            <MenuItem color="black" isDisabled>
+                                              Bloquear
+                                            </MenuItem>
+                                          </>
+                                        ) : user.status === "inativo" ? (
+                                          <>
+                                            <MenuItem color="black" isDisabled>
+                                              Ativar
+                                            </MenuItem>
+                                            <MenuItem color="black" isDisabled>
+                                              Bloquear
+                                            </MenuItem>
+                                          </>
+                                        ) : user.status === "bloqueado" ? (
+                                          <></>
+                                        ) : (
+                                          <></>
+                                        )}
                                       </MenuList>
                                     </>
                                   )}
@@ -462,12 +480,14 @@ export default function UserList({ users }: any) {
                               </Td>
                             </Tr>
                           ) : (
+                            // )
                             <></>
                           )}
                         </>
                       );
                     })
-                    .slice(page - 1, page - 6)}
+                    // .slice(page - 1, page - 6)
+                  }
                 </Tbody>
               </Table>
               <Pagination
@@ -482,7 +502,7 @@ export default function UserList({ users }: any) {
                 }
                 currentPage={page}
                 onPageChange={setPage}
-                registersPerPage={3}
+                registersPerPage={5}
               />
             </>
           )}
